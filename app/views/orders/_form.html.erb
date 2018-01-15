@@ -1,0 +1,81 @@
+<%= form_with(model: order, local: true) do |form| %>
+  <% if order.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(order.errors.count, "error") %> prohibited this order from being saved:</h2>
+
+      <ul>
+      <% order.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<div class="order-form">
+  <div class="field">
+    <%= hidden_field_tag :restaurant_id, @restaurant.id %>
+  </div>
+
+  <div class="field">
+    <%= hidden_field_tag :manifest, 'Food order' %>
+    <%= hidden_field_tag :pickup_name, 'Driver name' %>
+    <%= hidden_field_tag :pickup_notes, 'Call the customer when you get there!' %>
+  </div>
+
+  <div class="field">
+    <%= hidden_field_tag :pickup_address, @restaurant.address + ', ' + @restaurant.city + ', ' + @restaurant.state %>
+  </div>
+
+  <div class="field">
+    <%= hidden_field_tag :pickup_phone_number, @restaurant.phone_number %>
+  </div>
+
+  <div class="field">
+    <%= hidden_field_tag :pickup_business_name, @restaurant.name %>
+  </div>      
+
+<table>
+  <tr>
+    <div class="field">
+      <td><%= form.label "Name" %></td>
+      <td><%= form.text_field :dropoff_name, id: :dropoff_name %></td>
+    </div>
+  </tr>
+
+  <tr>
+    <div class="field">
+      <td><%= form.label "Address" %></td>
+      <td><%= form.text_field :dropoff_address, id: :dropoff_address %></td>
+    </div>
+  </tr>
+
+  <tr>
+    <div class="field">
+      <td><%= form.label "Phone number" %></td>
+      <td><%= form.text_field :dropoff_phone_number, id: :dropoff_phone_number %></td>
+    </div>
+  </tr>
+
+  <tr>
+    <div class="field">
+      <td><%= form.label "Building name" %></td>
+      <td><%= form.text_field :dropoff_business_name, id: :dropoff_business_name %></td>
+    </div>
+  </tr>
+
+  <tr>
+    <div class="field">
+      <td><%= form.label "Dropoff notes" %></td>
+      <td><%= form.text_field :dropoff_notes, id: :dropoff_notes %></td>
+    </div>
+  </tr>
+
+  <tr>
+    <div class="actions">
+      <td colspan="2"><%= form.submit submit_text %></td>
+    </div>
+  <tr>
+</table>
+</div>
+
+<% end %>

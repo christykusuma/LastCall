@@ -1,0 +1,55 @@
+<!-- For everyone, show restaurant profile -->
+
+
+<p>
+  <strong>Image:</strong>
+  <%= @restaurant.image %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @restaurant.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @restaurant.description %>
+</p>
+
+<p>
+  <strong>Phone number:</strong>
+  <%= @restaurant.phone_number %>
+</p>
+
+<p>
+  <strong>Address:</strong>
+  <%= @restaurant.address %>
+</p>
+
+<p>
+  <strong>State:</strong>
+  <%= @restaurant.state %>
+</p>
+
+<p>
+  <strong>City:</strong>
+  <%= @restaurant.city %>
+</p>
+
+<p>
+  <strong>Zipcode:</strong>
+  <%= @restaurant.zipcode %>
+</p>
+
+<p>
+  <strong>Open hours:</strong>
+  <%= @restaurant.open_hours %>am
+</p>
+
+<p>
+  <strong>Close hours:</strong>
+  <%= @restaurant.close_hours %>pm
+</p>
+
+<%= link_to 'Edit', edit_restaurant_path(@restaurant) %> |
+<%= link_to 'Back', restaurants_path %>

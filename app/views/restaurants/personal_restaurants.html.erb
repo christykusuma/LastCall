@@ -1,0 +1,51 @@
+<!-- For restaurant admins, see a list of restaurants you own -->
+
+
+
+<h2>Welcome, <%= current_user.full_name%>.</h2>
+
+<div class="personal_restaurants">
+  <%= link_to 'Create new restaurant', new_restaurant_path, class: "create-restaurant-link" %>
+
+<!-- Search bar for restaurants -->
+<%= form_tag(restaurants_path, :method => "get", id: "search-form") do %>
+  <%= text_field_tag :location, params[:location], placeholder: "Delivery address..." %>
+  <%= text_field_tag :search, params[:search], placeholder: "Search restaurants..." %>
+  <%= submit_tag "Search", :name => nil %>
+  <button>Cuisine</button>
+  <button>Filter</button>
+<% end %> 
+
+<% if current_user.restaurants.blank? %>
+  <h4>Create your restaurant! <%= params[:name] %></h4>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Address</th>
+      <th>Phone number</th>
+      <th>Hours of Operation</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% current_user.restaurants.each do |restaurant| %>
+      <tr>
+        <td><div><%= link_to 'x', restaurant, method: :delete, data: { confirm: 'Are you sure?' } %></div></td>
+        <td><%= link_to restaurant.name, my_restaurant_path(current_user, restaurant.id) %></td>
+        <td><%= restaurant.description %></td>
+        <td><%= restaurant.address %>, <%= restaurant.city %> <%= restaurant.state %> <%= restaurant.zipcode %></td>
+        <td><%= restaurant.phone_number %></td>
+        <td><%= restaurant.open_hours %>AM - <%= restaurant.close_hours %>PM </td>
+        <td><%= link_to 'Edit My Restaurant', edit_restaurant_path(restaurant) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+</div>

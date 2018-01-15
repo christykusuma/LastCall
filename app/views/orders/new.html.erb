@@ -1,0 +1,7 @@
+<!-- Place order information for client -->
+
+<h2>New Order</h2>
+
+<%= render 'form', order: @order, url: create_order_path(@restaurant.id), method: :post, submit_text: 'Submit Order' %>
+
+<%= link_to 'Back', orders_path %>

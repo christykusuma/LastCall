@@ -1,0 +1,134 @@
+<!-- For everyone, show all restaurants available in your area -->
+
+
+
+<!-- If there are no restaurants -->
+<% if @restaurants.blank? %>
+  <h4>There are no restaurants with that name <%= params[:name] %>.</h4>
+<% end %>
+
+<%= render template: 'about/index' %>
+
+<!-- map styling  -->
+<style>
+  #map{
+    height: 400px;
+    width: 100%;
+  }
+</style>
+<div id="map"></div>
+<script>
+// map options 
+   var map;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat:40.709556, lng:-74.006835}, 
+          zoom: 16
+        });
+ // restaurant marker
+ 
+ // var content = "test text";
+ // var infowindow = new google.maps.InfoWindow({
+ //  content: content
+ // });
+     
+     const restaurants = <%= raw @restaurants.map{|loc| loc.to_h}.to_json %>;
+     restaurants.forEach( function(restaurant){
+       var infowindow = new google.maps.InfoWindow({
+        content: `<p> <img src= "${restaurant.image}"><h6>${restaurant.name}</h6>
+        ${restaurant.address} 
+        ${restaurant.state} 
+        ${restaurant.city} 
+        ${restaurant.zipcode}
+
+        <br>
+        <br>
+        ${restaurant.description}
+        </p>`
+       });
+         var marker = new google.maps.Marker({
+                       map: map,
+                       position: restaurant,
+                       
+                      });
+         marker.setMap(map);
+         marker.addListener('click', function() {
+          infowindow.open(map,marker)
+         });
+         
+       });
+
+  document.getElementById('submit').addEventListener('click', function() {
+         geocodeAddress(geocoder, map);
+     })
+      infoWindow = new google.maps.InfoWindow;
+
+       
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            infoWindow.setPosition(pos);
+            infoWindow.setContent('Location found.');
+            infoWindow.open(map);
+            map.setCenter(pos);
+          }, function() {
+            handleLocationError(true, infoWindow, map.getCenter());
+          });
+        } else {
+          // Browser doesn't support Geolocation
+          handleLocationError(false, infoWindow, map.getCenter());
+        }
+      }
+
+      function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+                              'Error: The Geolocation service failed.' :
+                              'Error: Your browser doesn\'t support geolocation.');
+        infoWindow.open(map);
+      }
+
+</script>
+
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBfsL2AIQqCWEYR-ACZ4BOcC-_N7upMXXA&callback=initMap">
+</script>
+
+<!-- Search bar for restaurants -->
+<%= form_tag(restaurants_path, :method => "get", id: "search-form") do %>
+  <%= text_field_tag :location, params[:location], placeholder: "Delivery address..." %>
+  <%= text_field_tag :search, params[:search], placeholder: "Search restaurants..." %>
+  <%= submit_tag "Search", :name => nil %>
+  <button>Cuisine</button>
+  <button>Filter</button>
+<% end %> 
+
+<!-- List of restaurants -->
+<table class="link">
+  <tbody>
+    <% @restaurants.each do |restaurant| %>
+      <tr>
+        <td>
+          0.9 miles<br>
+          45 - 55 mins
+        </td>
+        <td class="placeholder-img"><%= image_tag restaurant.image.url (:thumb)%></td>
+        <td>
+          <span style="font-size: 1.15em;"><%= link_to restaurant.name, menu_path(restaurant.id) %></span><br>
+          <p><%= restaurant.category %></p>
+        </td>
+        <td><%= restaurant.description %></td>
+        <td style="padding-right: 25px;">
+          <span style="font-size: 1.25em;">&#9733;&#9733;&#9733;&#9733;&#9733;</span><br>
+          25 Ratings<br>
+          $$$
+        </td>
+      </tr>
+  </tbody>
+  <% end %>
+</table>
+

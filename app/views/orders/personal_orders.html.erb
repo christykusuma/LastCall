@@ -1,0 +1,42 @@
+
+<div class="current-orders">
+<h2>Your Current Orders</h2>
+
+<div class="orders">
+	<% @orders.each do |order| %>
+	<table>
+		<tr>
+			<th colspan="2">Delivery Information</th>
+		</tr>
+
+		<tr>
+			<td colspan="2">
+				Delivered to: <%= order.dropoff_name %><br>
+				<%= order.dropoff_address %> | <%= order.dropoff_phone_number %><br>
+				<%= order.dropoff_notes%>
+			</td>
+		</tr>
+
+		<tr>
+			<th colspan="2">Order Information</th>
+		</tr>
+
+			<% order.menu_item_orders.each do |menu_item| %>
+			<tr>
+				<% if menu_item.quantity.to_i > 0 %>
+				<td>
+					<%= menu_item.quantity %> <%= menu_item.menu_item.name %>
+				</td>
+				<td>
+					<%= number_with_precision(menu_item.menu_item.price, :precision => 2) %>
+			
+				</td>
+				<% end %>
+			<% end %>
+		</tr>
+
+	</table>
+
+	<% end %>
+</div>
+</div>
